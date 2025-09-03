@@ -93,7 +93,7 @@ Signed-off-by: Sowmiya Sree Elavalagan <ssreeela@codeaurora.org>
  /**
   * DOC: Interface list locking
   *
-@@ -776,6 +782,13 @@ static int ieee80211_stop(struct net_dev
+@@ -782,6 +788,13 @@ static int ieee80211_stop(struct net_dev
  		ieee80211_stop_mbssid(sdata);
  	}
  
@@ -107,7 +107,7 @@ Signed-off-by: Sowmiya Sree Elavalagan <ssreeela@codeaurora.org>
  	wiphy_lock(sdata->local->hw.wiphy);
  	wiphy_work_cancel(sdata->local->hw.wiphy, &sdata->activate_links_work);
  
-@@ -1226,6 +1239,34 @@ void ieee80211_del_virtual_monitor(struc
+@@ -1236,6 +1249,34 @@ void ieee80211_del_virtual_monitor(struc
  	kfree(sdata);
  }
  
@@ -142,7 +142,7 @@ Signed-off-by: Sowmiya Sree Elavalagan <ssreeela@codeaurora.org>
  /*
   * NOTE: Be very careful when changing this function, it must NOT return
   * an error on interface type changes that have been pre-checked, so most
-@@ -1456,6 +1497,19 @@ int ieee80211_do_open(struct wireless_de
+@@ -1473,6 +1514,19 @@ int ieee80211_do_open(struct wireless_de
  
  	ieee80211_recalc_ps(local);
  
@@ -236,7 +236,7 @@ Signed-off-by: Sowmiya Sree Elavalagan <ssreeela@codeaurora.org>
  
 --- a/net/mac80211/tx.c
 +++ b/net/mac80211/tx.c
-@@ -4495,6 +4495,35 @@ static void ieee80211_mlo_multicast_tx(s
+@@ -4498,6 +4498,35 @@ static void ieee80211_mlo_multicast_tx(s
  	kfree_skb(skb);
  }
  
@@ -272,7 +272,7 @@ Signed-off-by: Sowmiya Sree Elavalagan <ssreeela@codeaurora.org>
  /**
   * ieee80211_subif_start_xmit - netif start_xmit function for 802.3 vifs
   * @skb: packet to be sent
-@@ -4510,6 +4539,10 @@ netdev_tx_t ieee80211_subif_start_xmit(s
+@@ -4513,6 +4542,10 @@ netdev_tx_t ieee80211_subif_start_xmit(s
  	struct ieee80211_sub_if_data *sdata = IEEE80211_DEV_TO_SUB_IF(dev);
  	const struct ethhdr *eth = (void *)skb->data;
  
@@ -283,7 +283,7 @@ Signed-off-by: Sowmiya Sree Elavalagan <ssreeela@codeaurora.org>
  	if (likely(!is_multicast_ether_addr(eth->h_dest)))
  		goto normal;
  
-@@ -4696,6 +4729,10 @@ netdev_tx_t ieee80211_subif_start_xmit_8
+@@ -4701,6 +4734,10 @@ netdev_tx_t ieee80211_subif_start_xmit_8
  	struct ieee80211_key *key;
  	struct sta_info *sta;
  

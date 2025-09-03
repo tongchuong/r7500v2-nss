@@ -49,7 +49,7 @@ Signed-off-by: Felix Fietkau <nbd@nbd.name>
  
 --- a/include/net/cfg80211.h
 +++ b/include/net/cfg80211.h
-@@ -4703,6 +4703,7 @@ struct cfg80211_ops {
+@@ -4705,6 +4705,7 @@ struct cfg80211_ops {
  					     struct ieee80211_channel *chan);
  
  	int	(*set_monitor_channel)(struct wiphy *wiphy,
