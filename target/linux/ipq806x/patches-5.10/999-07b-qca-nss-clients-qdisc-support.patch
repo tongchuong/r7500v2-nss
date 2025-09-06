@@ -8,8 +8,8 @@
  	u32			limit;
  	const struct Qdisc_ops	*ops;
  	struct qdisc_size_table	__rcu *stab;
-@@ -1332,4 +1333,9 @@ static inline int skb_tc_reinsert(struct
- 	return res->ingress ? netif_receive_skb(skb) : dev_queue_xmit(skb);
+@@ -1327,4 +1328,9 @@ static inline void qdisc_synchronize(con
+ 		msleep(1);
  }
  
 +/* QCA NSS Qdisc Support - Start */
@@ -271,7 +271,7 @@
  #endif
 --- a/net/sched/sch_api.c
 +++ b/net/sched/sch_api.c
-@@ -2307,4 +2307,26 @@ static int __init pktsched_init(void)
+@@ -2356,4 +2356,26 @@ static int __init pktsched_init(void)
  	return 0;
  }
  
@@ -319,7 +319,7 @@
  {
 --- a/net/l2tp/l2tp_core.c
 +++ b/net/l2tp/l2tp_core.c
-@@ -400,6 +400,31 @@ err_tlock:
+@@ -398,6 +398,31 @@ err_tlock:
  }
  EXPORT_SYMBOL_GPL(l2tp_session_register);
  
@@ -365,7 +365,7 @@
   * Destruction is triggered using the *_delete functions, and completes asynchronously.
 --- a/include/linux/netdevice.h
 +++ b/include/linux/netdevice.h
-@@ -982,6 +982,20 @@ struct dev_ifalias {
+@@ -1015,6 +1015,20 @@ struct dev_ifalias {
  struct devlink;
  struct tlsdev_ops;
  
@@ -386,7 +386,7 @@
  struct netdev_name_node {
  	struct hlist_node hlist;
  	struct list_head list;
-@@ -1498,6 +1512,12 @@ struct net_device_ops {
+@@ -1531,6 +1545,12 @@ struct net_device_ops {
  	int			(*ndo_bridge_dellink)(struct net_device *dev,
  						      struct nlmsghdr *nlh,
  						      u16 flags);
@@ -440,7 +440,7 @@
  #endif /* _CONNTRACK_PROTO_GRE_H */
 --- a/net/ipv4/ip_gre.c
 +++ b/net/ipv4/ip_gre.c
-@@ -1325,6 +1325,7 @@ static void ipgre_tap_setup(struct net_d
+@@ -1336,6 +1336,7 @@ static void ipgre_tap_setup(struct net_d
  	dev->netdev_ops	= &gre_tap_netdev_ops;
  	dev->priv_flags &= ~IFF_TX_SKB_SHARING;
  	dev->priv_flags	|= IFF_LIVE_ADDR_CHANGE;
@@ -450,7 +450,7 @@
  
 --- a/net/ipv6/ip6_gre.c
 +++ b/net/ipv6/ip6_gre.c
-@@ -1921,6 +1921,7 @@ static void ip6gre_tap_setup(struct net_
+@@ -1942,6 +1942,7 @@ static void ip6gre_tap_setup(struct net_
  
  	dev->priv_flags &= ~IFF_TX_SKB_SHARING;
  	dev->priv_flags |= IFF_LIVE_ADDR_CHANGE;
@@ -460,7 +460,7 @@
  
 --- a/include/net/netfilter/nf_flow_table.h
 +++ b/include/net/netfilter/nf_flow_table.h
-@@ -157,10 +157,14 @@ enum nf_flow_flags {
+@@ -158,10 +158,14 @@ enum nf_flow_flags {
  	NF_FLOW_HW_PENDING,
  };
  
@@ -479,7 +479,7 @@
  
  struct flow_offload {
  	struct flow_offload_tuple_rhash		tuplehash[FLOW_OFFLOAD_DIR_MAX];
-@@ -171,6 +175,25 @@ struct flow_offload {
+@@ -172,6 +176,25 @@ struct flow_offload {
  	struct rcu_head				rcu_head;
  };
  
@@ -507,7 +507,7 @@
  
 --- a/drivers/net/ppp/pppoe.c
 +++ b/drivers/net/ppp/pppoe.c
-@@ -73,6 +73,12 @@
+@@ -74,6 +74,12 @@
  #include <linux/proc_fs.h>
  #include <linux/seq_file.h>
  
@@ -530,7 +530,7 @@
  
  static const struct flow_dissector_key flow_keys_bonding_keys[] = {
  	{
-@@ -1120,6 +1121,23 @@ void bond_change_active_slave(struct bon
+@@ -1119,6 +1120,23 @@ void bond_change_active_slave(struct bon
  			if (BOND_MODE(bond) == BOND_MODE_8023AD)
  				bond_3ad_handle_link_change(new_active, BOND_LINK_UP);
  
@@ -554,7 +554,7 @@
  			if (bond_is_lb(bond))
  				bond_alb_handle_link_change(bond, new_active, BOND_LINK_UP);
  		} else {
-@@ -1697,6 +1715,7 @@ int bond_enslave(struct net_device *bond
+@@ -1707,6 +1725,7 @@ int bond_enslave(struct net_device *bond
  	const struct net_device_ops *slave_ops = slave_dev->netdev_ops;
  	struct slave *new_slave = NULL, *prev_slave;
  	struct sockaddr_storage ss;
@@ -562,7 +562,7 @@
  	int link_reporting;
  	int res = 0, i;
  
-@@ -2099,6 +2118,13 @@ int bond_enslave(struct net_device *bond
+@@ -2107,6 +2126,13 @@ int bond_enslave(struct net_device *bond
  	if (bond_mode_can_use_xmit_hash(bond))
  		bond_update_slave_arr(bond, NULL);
  
@@ -576,7 +576,7 @@
  
  	slave_info(bond_dev, slave_dev, "Enslaving as %s interface with %s link\n",
  		   bond_is_active_slave(new_slave) ? "an active" : "a backup",
-@@ -2171,6 +2197,14 @@ err_undo_flags:
+@@ -2179,6 +2205,14 @@ err_undo_flags:
  		}
  	}
  
@@ -591,7 +591,7 @@
  	return res;
  }
  
-@@ -2192,6 +2226,7 @@ static int __bond_release_one(struct net
+@@ -2200,6 +2234,7 @@ static int __bond_release_one(struct net
  	struct bonding *bond = netdev_priv(bond_dev);
  	struct slave *slave, *oldcurrent;
  	struct sockaddr_storage ss;
@@ -599,7 +599,7 @@
  	int old_flags = bond_dev->flags;
  	netdev_features_t old_features = bond_dev->features;
  
-@@ -2214,6 +2249,14 @@ static int __bond_release_one(struct net
+@@ -2222,6 +2257,14 @@ static int __bond_release_one(struct net
  
  	bond_set_slave_inactive_flags(slave, BOND_SLAVE_NOTIFY_NOW);
  
@@ -614,7 +614,7 @@
  	bond_sysfs_slave_del(slave);
  
  	/* recompute stats just before removing the slave */
-@@ -2512,6 +2555,11 @@ static void bond_miimon_commit(struct bo
+@@ -2529,6 +2572,11 @@ static void bond_miimon_commit(struct bo
  	struct list_head *iter;
  	struct slave *slave, *primary;
  
@@ -626,7 +626,7 @@
  	bond_for_each_slave(bond, slave, iter) {
  		switch (slave->link_new_state) {
  		case BOND_LINK_NOCHANGE:
-@@ -2554,6 +2602,12 @@ static void bond_miimon_commit(struct bo
+@@ -2571,6 +2619,12 @@ static void bond_miimon_commit(struct bo
  
  			bond_miimon_link_change(bond, slave, BOND_LINK_UP);
  
@@ -639,7 +639,7 @@
  			if (!bond->curr_active_slave || slave == primary)
  				goto do_failover;
  
-@@ -2595,6 +2649,15 @@ do_failover:
+@@ -2612,6 +2666,15 @@ do_failover:
  	}
  
  	bond_set_carrier(bond);
@@ -655,7 +655,7 @@
  }
  
  /* bond_mii_monitor
-@@ -4822,6 +4885,11 @@ static void bond_destructor(struct net_d
+@@ -4876,6 +4939,11 @@ static void bond_destructor(struct net_d
  	struct bonding *bond = netdev_priv(bond_dev);
  	if (bond->wq)
  		destroy_workqueue(bond->wq);
@@ -667,7 +667,7 @@
  }
  
  void bond_setup(struct net_device *bond_dev)
-@@ -5390,6 +5458,16 @@ int bond_create(struct net *net, const c
+@@ -5448,6 +5516,16 @@ int bond_create(struct net *net, const c
  	bond_work_init_all(bond);
  
  	rtnl_unlock();
@@ -684,7 +684,7 @@
  	return 0;
  }
  
-@@ -5487,6 +5565,204 @@ static void __exit bonding_exit(void)
+@@ -5545,6 +5623,204 @@ static void __exit bonding_exit(void)
  #endif
  }
  
@@ -918,7 +918,7 @@
  /*
 --- a/include/net/bonding.h
 +++ b/include/net/bonding.h
-@@ -256,6 +256,7 @@ struct bonding {
+@@ -257,6 +257,7 @@ struct bonding {
  	/* protecting ipsec_list */
  	spinlock_t ipsec_lock;
  #endif /* CONFIG_XFRM_OFFLOAD */
@@ -926,7 +926,7 @@
  };
  
  #define bond_slave_get_rcu(dev) \
-@@ -770,4 +771,13 @@ static inline netdev_tx_t bond_tx_drop(s
+@@ -751,4 +752,13 @@ static inline netdev_tx_t bond_tx_drop(s
  	return NET_XMIT_DROP;
  }
  
@@ -942,7 +942,7 @@
  #endif /* _NET_BONDING_H */
 --- a/drivers/net/bonding/bond_3ad.c
 +++ b/drivers/net/bonding/bond_3ad.c
-@@ -111,6 +111,40 @@ static void ad_marker_response_received(
+@@ -112,6 +112,40 @@ static void ad_marker_response_received(
  					struct port *port);
  static void ad_update_actor_keys(struct port *port, bool reset);
  
@@ -983,7 +983,7 @@
  
  /* ================= api to bonding and kernel code ================== */
  
-@@ -988,6 +1022,29 @@ static void ad_mux_machine(struct port *
+@@ -989,6 +1023,29 @@ static void ad_mux_machine(struct port *
  				port->actor_oper_port_state |=
  				    LACP_STATE_SYNCHRONIZATION;
  			}
@@ -1013,7 +1013,7 @@
  			break;
  		case AD_MUX_COLLECTING_DISTRIBUTING:
  			if (!(port->sm_vars & AD_PORT_SELECTED) ||
-@@ -1067,7 +1124,7 @@ static void ad_mux_machine(struct port *
+@@ -1068,7 +1125,7 @@ static void ad_mux_machine(struct port *
   * If lacpdu arrived, stop previous timer (if exists) and set the next state as
   * CURRENT. If timer expired set the state machine in the proper state.
   * In other cases, this function checks if we need to switch to other state.
@@ -1022,7 +1022,7 @@
  static void ad_rx_machine(struct lacpdu *lacpdu, struct port *port)
  {
  	rx_states_t last_state;
-@@ -1885,6 +1942,8 @@ static void ad_enable_collecting_distrib
+@@ -1888,6 +1945,8 @@ static void ad_enable_collecting_distrib
  					      bool *update_slave_arr)
  {
  	if (port->aggregator->is_active) {
@@ -1031,7 +1031,7 @@
  		slave_dbg(port->slave->bond->dev, port->slave->dev,
  			  "Enabling port %d (LAG %d)\n",
  			  port->actor_port_number,
-@@ -1892,6 +1951,16 @@ static void ad_enable_collecting_distrib
+@@ -1895,6 +1954,16 @@ static void ad_enable_collecting_distrib
  		__enable_port(port);
  		/* Slave array needs update */
  		*update_slave_arr = true;
@@ -1048,7 +1048,7 @@
  	}
  }
  
-@@ -2750,3 +2819,102 @@ int bond_3ad_stats_fill(struct sk_buff *
+@@ -2768,3 +2837,102 @@ int bond_3ad_stats_fill(struct sk_buff *
  
  	return 0;
  }
@@ -1153,7 +1153,7 @@
 +
 --- a/include/net/bond_3ad.h
 +++ b/include/net/bond_3ad.h
-@@ -307,5 +307,13 @@ void bond_3ad_update_lacp_rate(struct bo
+@@ -305,5 +305,13 @@ void bond_3ad_update_lacp_rate(struct bo
  void bond_3ad_update_ad_actor_settings(struct bonding *bond);
  int bond_3ad_stats_fill(struct sk_buff *skb, struct bond_3ad_stats *stats);
  size_t bond_3ad_stats_size(void);
@@ -1169,7 +1169,7 @@
  
 --- a/include/net/addrconf.h
 +++ b/include/net/addrconf.h
-@@ -100,6 +100,9 @@ int ipv6_chk_prefix(const struct in6_add
+@@ -110,6 +110,9 @@ int ipv6_chk_prefix(const struct in6_add
  struct net_device *ipv6_dev_find(struct net *net, const struct in6_addr *addr,
  				 struct net_device *dev);
  
@@ -1181,7 +1181,7 @@
  				     struct net_device *dev, int strict);
 --- a/net/ipv6/addrconf.c
 +++ b/net/ipv6/addrconf.c
-@@ -2008,6 +2008,37 @@ struct net_device *ipv6_dev_find(struct
+@@ -2031,6 +2031,37 @@ struct net_device *ipv6_dev_find(struct
  }
  EXPORT_SYMBOL(ipv6_dev_find);
  
