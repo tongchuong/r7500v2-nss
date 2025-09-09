@@ -1,6 +1,6 @@
 --- a/include/dt-bindings/clock/qcom,gcc-ipq806x.h
 +++ b/include/dt-bindings/clock/qcom,gcc-ipq806x.h
-@@ -283,8 +283,9 @@
+@@ -283,6 +283,7 @@
  #define EBI2_AON_CLK				281
  #define NSSTCM_CLK_SRC				282
  #define NSSTCM_CLK				283
@@ -8,8 +8,6 @@
  #define CE5_A_CLK_SRC				285
  #define CE5_H_CLK_SRC				286
  #define CE5_CORE_CLK_SRC			287
- 
- #endif
 --- a/drivers/clk/qcom/gcc-ipq806x.c
 +++ b/drivers/clk/qcom/gcc-ipq806x.c
 @@ -24,6 +24,10 @@
@@ -23,10 +21,10 @@
  
  static struct clk_pll pll0 = {
  	.l_reg = 0x30c4,
-@@ -2997,6 +3001,139 @@ 
-	},
+@@ -2995,6 +2999,139 @@ static struct clk_branch ce5_h_clk = {
+ 	},
  };
-
+ 
 +static int nss_core_clk_set_rate(struct clk_hw *hw, unsigned long rate,
 +				 unsigned long parent_rate)
 +{
@@ -163,7 +161,7 @@
  static struct clk_regmap *gcc_ipq806x_clks[] = {
  	[PLL0] = &pll0.clkr,
  	[PLL0_VOTE] = &pll0_vote,
-@@ -3116,6 +3259,7 @@
+@@ -3114,6 +3251,7 @@ static struct clk_regmap *gcc_ipq806x_cl
  	[UBI32_CORE2_CLK_SRC] = &ubi32_core2_src_clk.clkr,
  	[NSSTCM_CLK_SRC] = &nss_tcm_src.clkr,
  	[NSSTCM_CLK] = &nss_tcm_clk.clkr,
@@ -171,7 +169,7 @@
  	[PLL9] = &hfpll0.clkr,
  	[PLL10] = &hfpll1.clkr,
  	[PLL12] = &hfpll_l2.clkr,
-@@ -3336,6 +3479,12 @@ static int gcc_ipq806x_probe(struct plat
+@@ -3334,6 +3472,12 @@ static int gcc_ipq806x_probe(struct plat
  	if (!regmap)
  		return -ENODEV;
  
