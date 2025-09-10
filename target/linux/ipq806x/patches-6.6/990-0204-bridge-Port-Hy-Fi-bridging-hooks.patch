@@ -146,7 +146,7 @@ Signed-off-by: Amitesh Anand <quic_amitesh@quicinc.com>
  	u16 vid = 0;
  	u8 state;
  
-@@ -207,7 +213,13 @@ int br_handle_frame_finish(struct net *n
+@@ -206,7 +212,13 @@ int br_handle_frame_finish(struct net *n
  		}
  		break;
  	case BR_PKT_UNICAST:
@@ -161,7 +161,7 @@ Signed-off-by: Amitesh Anand <quic_amitesh@quicinc.com>
  		break;
  	default:
  		break;
-@@ -223,12 +235,18 @@ int br_handle_frame_finish(struct net *n
+@@ -222,12 +234,18 @@ int br_handle_frame_finish(struct net *n
  			dst->used = now;
  		br_forward(dst->dst, skb, local_rcv, false);
  	} else {

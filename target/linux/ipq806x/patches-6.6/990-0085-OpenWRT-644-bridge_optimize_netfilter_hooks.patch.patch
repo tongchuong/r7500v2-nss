@@ -51,7 +51,7 @@ Signed-off-by: Murat Sezgin <msezgin@codeaurora.org>
  		       dev_net(indev), NULL, skb, indev, NULL,
  		       br_netif_receive_skb);
  }
-@@ -405,7 +405,7 @@ static rx_handler_result_t br_handle_fra
+@@ -404,7 +404,7 @@ static rx_handler_result_t br_handle_fra
  		 *   - returns = 0 (stolen/nf_queue)
  		 * Thus return 1 from the okfn() to signal the skb is ok to pass
  		 */
@@ -60,7 +60,7 @@ Signed-off-by: Murat Sezgin <msezgin@codeaurora.org>
  			    dev_net(skb->dev), NULL, skb, skb->dev, NULL,
  			    br_handle_local_finish) == 1) {
  			return RX_HANDLER_PASS;
-@@ -426,7 +426,7 @@ forward:
+@@ -425,7 +425,7 @@ forward:
  		if (ether_addr_equal(p->br->dev->dev_addr, dest))
  			skb->pkt_type = PACKET_HOST;
  

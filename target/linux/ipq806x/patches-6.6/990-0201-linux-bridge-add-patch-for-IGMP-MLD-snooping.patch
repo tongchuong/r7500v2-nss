@@ -91,7 +91,7 @@ Signed-off-by: Murat Sezgin <msezgin@codeaurora.org>
  	u16 vid = 0;
  	u8 state;
  
-@@ -182,6 +188,10 @@ int br_handle_frame_finish(struct net *n
+@@ -180,6 +186,10 @@ int br_handle_frame_finish(struct net *n
  
  	switch (pkt_type) {
  	case BR_PKT_MULTICAST:
